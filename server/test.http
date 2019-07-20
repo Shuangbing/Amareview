@@ -1,0 +1,99 @@
+@url=http://localhost:3000
+@header=content-type: application/json; charset=utf-8
+@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkMzI3NTc5NDFiNTU2MDllZDI4M2Q3YSIsImlhdCI6MTU2MzU4ODAzMX0.hz3E2FucXAt28MrDwBkHXKXpkpva4yN6E-wj3EuNvF0
+
+###auth register
+POST {{url}}/auth/register
+{{header}}
+
+{
+    "username": "user12",
+    "password": "1z2x3c"
+}
+
+###login post
+POST {{url}}/auth
+{{header}}
+
+{
+    "username": "user1",
+    "password": "1z2x3c"
+}
+
+###order post
+POST {{url}}/api/order
+{{header}}
+{{token}}
+
+{
+    "title": "test1",
+    "asin": "123123123",
+    "price_order": "1231",
+    "price_refund": "123.3",
+    "seller": "test22",
+    "status": 0
+}
+
+###order edit
+PUT {{url}}/api/order
+{{header}}
+{{token}}
+
+{
+    "id": "5d3277c0cf0cac0a8bfa79dc",
+    "title": "test2",
+    "asin": "123123123",
+    "price_order": "1231",
+    "price_refund": "123.3",
+    "seller": "test22"
+}
+
+###order edit
+PUT {{url}}/api/order/status
+{{header}}
+{{token}}
+
+{
+    "id": "5d3277c0cf0cac0a8bfa79dc",
+    "status": 5
+}
+
+
+###order get
+GET {{url}}/api/order
+{{header}}
+{{token}}
+
+
+
+
+###payment post
+POST {{url}}/api/payment
+{{header}}
+{{token}}
+
+{
+    "type": 1,
+    "account": "123123123",
+    "password": "1231",
+    "comment": "123.3"
+}
+
+###payment edit
+PUT {{url}}/api/payment
+{{header}}
+{{token}}
+
+{
+    "id": "5d3279e6b532cd0b29d58349",
+    "type": 1,
+    "account": "123123123",
+    "password": "1231",
+    "comment": "123.3"
+}
+
+
+###payment get
+GET {{url}}/api/payment
+{{header}}
+{{token}}
