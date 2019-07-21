@@ -23,11 +23,12 @@
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
-              <i class="el-icon-user"></i>ユーザー
+              <i class="el-icon-user"></i>アカウント
             </template>
             <el-menu-item-group>
-              <template slot="title">ユーザー管理</template>
-              <el-menu-item index="/users/list">全てのユーザー</el-menu-item>
+              <template slot="title">購入方法</template>
+              <el-menu-item index="/payment/list">購入アカウント一覧</el-menu-item>
+              <el-menu-item index="/payment/create">購入アカウント追加</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
@@ -35,12 +36,9 @@
               <i class="el-icon-setting"></i>システム管理
             </template>
             <el-menu-item-group>
-              <template slot="title">管理者</template>
-              <el-menu-item index="/admins/list">管理者一覧</el-menu-item>
-              <el-menu-item index="/admins/create">管理者追加</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="通知">
-              <el-menu-item index="3-3">メール送信管理</el-menu-item>
+              <template slot="title">従業員</template>
+              <el-menu-item index="/user/list">従業員一覧</el-menu-item>
+              <el-menu-item index="/user/create">従業員追加</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="管理者">
               <el-menu-item @click="logout">ログアウト</el-menu-item>
@@ -71,7 +69,6 @@
 export default {
   methods: {
     async logout() {
-      await this.$http.get("/logout");
       localStorage.clear();
       this.$router.push("/login");
     }

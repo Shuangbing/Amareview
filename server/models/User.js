@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
             return require('bcrypt').hashSync(val, 10)
         }
     },
+    level: { type: Number, default: 1 }
 }, {
         timestamps: true
     })

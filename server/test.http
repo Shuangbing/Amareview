@@ -12,7 +12,7 @@ POST {{url}}/auth/register
 }
 
 ###login post
-POST {{url}}/auth
+POST {{url}}/auth/login
 {{header}}
 
 {
@@ -97,3 +97,9 @@ PUT {{url}}/api/payment
 GET {{url}}/api/payment
 {{header}}
 {{token}}
+
+
+###
+POST https://www.unionpayintl.com/cardholderServ/serviceCenter/rate/search
+
+curDate=2019-7-21&baseCurrency=CNY&transactionCurrency=JPY

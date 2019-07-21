@@ -7,6 +7,12 @@ import Main from './components/Main'
 import OrderList from './components/Order/OrderList';
 import OrderEdit from './components/Order/OrderEdit';
 
+import PaymentList from './components/Payment/PaymentList';
+import PaymentEdit from './components/Payment/PaymentEdit';
+
+import UserList from './components/User/UserList';
+import UserEdit from './components/User/UserEdit';
+
 Vue.use(Router)
 
 const router = new Router({
@@ -19,6 +25,12 @@ const router = new Router({
         { path: '/order/create', component: OrderEdit },
         { path: '/order/edit/:id', component: OrderEdit, props: true },
         { path: '/order/list', component: OrderList },
+        { path: '/payment/create', component: PaymentEdit },
+        { path: '/payment/edit/:id', component: PaymentEdit, props: true },
+        { path: '/payment/list', component: PaymentList },
+        { path: '/user/create', component: UserEdit },
+        { path: '/user/edit/:id', component: UserEdit, props: true },
+        { path: '/user/list', component: UserList },
       ]
     },
     {

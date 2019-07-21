@@ -10,14 +10,14 @@
         <el-step title="返金待ち" :icon="this.icon[5]"></el-step>
         <el-step title="完了" :icon="this.icon[6]"></el-step>
       </el-steps>
-      <!-- <el-tag v-if="form.status==1" type="info">支払待ち</el-tag>
-      <el-tag v-if="form.status==2" type="info">受取待ち</el-tag>
-      <el-tag v-if="form.status==3" type="info">評価待ち</el-tag>
-      <el-tag v-if="form.status==4" type="warning">反映待ち</el-tag>
-      <el-tag v-if="form.status==5" type="warning">返金待ち</el-tag>
-      <el-tag v-if="form.status==6" type="success">完了</el-tag>-->
     </div>
     <el-form ref="form" :model="form" label-width="130px">
+      <el-form-item v-if="id" label="作成時間">
+        <el-tag>{{form.createdAt}}</el-tag>
+      </el-form-item>
+      <el-form-item v-if="id" label="最終更新">
+        <el-tag>{{form.updatedAt}}</el-tag>
+      </el-form-item>
       <el-form-item label="商品名">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
@@ -32,6 +32,16 @@
       </el-form-item>
       <el-form-item label="返金金額">
         <el-input v-model.number="form.price_refund"></el-input>
+      </el-form-item>
+      <el-form-item label="注文方法">
+        <el-select v-model="form.payment" placeholder="注文方法">
+          <el-option
+            v-for="item in payment_list"
+            :key="item._id"
+            :label="item.account"
+            :value="item._id"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="出品者連絡先">
         <el-input v-model="form.seller"></el-input>
@@ -65,6 +75,7 @@ export default {
   data() {
     return {
       form: {},
+      payment_list: {},
       icon: {
         1: "el-icon-sold-out",
         2: "el-icon-box",
@@ -115,7 +126,9 @@ export default {
       this.form = res.data.data;
     }
   },
-  created() {
+  async created() {
+    const res2 = await this.$http.get("/api/payment");
+    this.payment_list = res2.data.data
     if (this.id) {
       this.id && this.fetch();
     }

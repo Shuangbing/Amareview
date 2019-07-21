@@ -12,7 +12,6 @@ module.exports = app => {
     router.get('/order', async (req, res) => {
         const order = await Order.find({user: req.user.id}).sort('-createdAt')
         res.send({
-            message: '注文リストを確認できました',
             data: order
         })
     })
@@ -20,13 +19,12 @@ module.exports = app => {
     router.get('/order/:id', async (req, res) => {
         const order = await Order.findById(req.params.id)
         res.send({
-            message: '注文リストを確認できました',
             data: order
         })
     })
 
     router.delete('/order/:id', async (req, res) => {
-        const order = await Order.findByIdAndRemove(req.params.id)
+        const order = await Order.findOneAndRemove({_id: req.params.id, user: req.user.id})
         res.send({
             message: '注文を削除しました',
         })
@@ -66,7 +64,6 @@ module.exports = app => {
             status: status
         }, { new: true })
         res.send({
-            message: '注文を更新しました',
             data: order
         })
     })
@@ -74,7 +71,6 @@ module.exports = app => {
     router.get('/payment', async (req, res) => {
         const payment = await Payment.find({user: req.user.id})
         res.send({
-            message: '購入方法確認できました`',
             data: payment
         })
     })
@@ -94,9 +90,9 @@ module.exports = app => {
         })
     })
 
-    router.put('/payment', async (req, res) => {
-        const { id, type, account, password, comment } = req.body
-        const payment = await Payment.findOneAndUpdate({_id: id, user: req.user.id}, {
+    router.put('/payment/:id', async (req, res) => {
+        const { type, account, password, comment } = req.body
+        const payment = await Payment.findOneAndUpdate({_id: req.params.id, user: req.user.id}, {
             type: type,
             account: account,
             password: password,
@@ -108,7 +104,52 @@ module.exports = app => {
         })
     })
 
+    router.get('/payment/:id', async (req, res) => {
+        const payment = await Payment.findOne({_id: req.params.id, user: req.user.id})
+        res.send({
+            data: payment
+        })
+    })
+
+    router.delete('/payment/:id', async (req, res) => {
+        const order = await Payment.findOneAndRemove({_id: req.params.id, user: req.user.id})
+        res.send({
+            message: '購入方法を削除しました',
+        })
+    })
+
     const authMiddleware = require('../middleware/auth')
+    const levelMiddleware = require('../middleware/level')
+
+    router.get('/user', async (req, res) => {
+        const user = await User.find()
+        res.send({
+            data: user
+        })
+    })
+
+    router.get('/user/:id', async (req, res) => {
+        const user = await User.findById(req.params.id)
+        res.send({
+            data: user
+        })
+    })
+
+    router.post('/user', levelMiddleware() ,async (req, res) => {
+        const user = await User.create(req.body)
+        res.send({
+            message: '従業員追加しました',
+        })
+    })
+
+    router.put('/user/:id', levelMiddleware() ,async (req, res) => {
+        const user = await User.findByIdAndUpdate(req.params.id,req.body)
+        res.send({
+            message: '従業員情報更新しました',
+        })
+    })
+
+
     app.use('/api', authMiddleware(), router)
 
     app.post('/auth/register', async (req, res) => {
@@ -124,12 +165,12 @@ module.exports = app => {
         })
     })
 
-    app.post('/auth', async (req, res) => {
+    app.post('/auth/login', async (req, res) => {
         const { username, password } = req.body
         const user = await User.findOne({
             username: username
         }).select('+password')
-        assert(user, 401, 'ユーザが見つかりませんでした')
+        assert(user, 422, 'ユーザが見つかりませんでした')
         const isValid = require('bcrypt').compareSync(password, user.password)
         assert(isValid, 422, 'パスワードが正しくありません')
         const token = jwt.sign({ id: user._id }, app.get('secret'))

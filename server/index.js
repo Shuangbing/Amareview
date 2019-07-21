@@ -9,6 +9,8 @@ app.use(express.json())
 
 require('./plugins/database')(app)
 require('./routes')(app)
+require('./plugins/exchange')
+
 
 app.listen(3000, () => {
   console.log('http://localhost:3000');

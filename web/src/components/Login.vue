@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         async login(){
-            const res = await this.$http.post('/auth', this.model)
+            const res = await this.$http.post('/auth/login', this.model)
             localStorage.token = res.data.data.access_token
             this.$router.push('/')
             //this.$message({type: 'success', message: 'ログイン完了'})
