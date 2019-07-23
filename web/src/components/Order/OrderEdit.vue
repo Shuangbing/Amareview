@@ -28,10 +28,10 @@
         <el-input v-model="form.order_id"></el-input>
       </el-form-item>
       <el-form-item label="購入金額">
-        <el-input v-model.number="form.price_order"></el-input>
+        <el-input v-model.number="form.price_order" type="number"></el-input>
       </el-form-item>
       <el-form-item label="返金金額">
-        <el-input v-model.number="form.price_refund"></el-input>
+        <el-input type="number" v-model="form.price_refund" v-bind:value="this.form.price_order*this.rate"></el-input>
       </el-form-item>
       <el-form-item label="注文方法">
         <el-select v-model="form.payment" placeholder="注文方法">
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       form: {},
+      rate: 0,
       payment_list: {},
       icon: {
         1: "el-icon-sold-out",
@@ -113,6 +114,10 @@ export default {
     };
   },
   methods: {
+    changeRefundPrice(){
+      alert('good')
+      this.form.price_refund = 100;
+    },
     async onSubmit() {
       if (this.id) {
         await this.$http.put("/api/order/" + this.id, this.form);
@@ -123,7 +128,9 @@ export default {
     },
     async fetch() {
       const res = await this.$http.get("/api/order/" + this.id);
+      const res_rate = await this.$http.get("/api/order/rate");
       this.form = res.data.data;
+      this.rate = res_rate.data.data.rate;
     }
   },
   async created() {

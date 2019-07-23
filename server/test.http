@@ -64,7 +64,10 @@ GET {{url}}/api/order
 {{header}}
 {{token}}
 
-
+###order get
+GET {{url}}/api/order/rate
+{{header}}
+{{token}}
 
 
 ###payment post

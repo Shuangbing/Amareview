@@ -5,10 +5,18 @@ module.exports = app => {
     const User = require('../models/User')
     const Order = require('../models/Order')
     const Payment = require('../models/Payment')
+    const ExChange = require('../models/ExChange')
     const router = express.Router({
         mergeParams: true
     })
 
+    router.get('/order/rate', async (req, res) => {
+        const exchange = await ExChange.findOne()
+        res.send({
+            data: exchange
+        })
+    })
+    
     router.get('/order', async (req, res) => {
         const order = await Order.find({user: req.user.id}).sort('-createdAt')
         res.send({
