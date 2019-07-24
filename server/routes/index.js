@@ -17,11 +17,12 @@ module.exports = app => {
         })
     })
     
-    router.get('/order', async (req, res) => {
-        const order = await Order.find({user: req.user.id}).sort('-createdAt')
+    router.get('/order/page/:page', async (req, res) => {
+        const order_count = await Order.find({user: req.user.id})
+        const orders = await Order.find({user: req.user.id}).skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
         res.send({
-            total: order.length,
-            data: order
+            total: order_count.length,
+            data: orders
         })
     })
 
@@ -77,8 +78,17 @@ module.exports = app => {
         })
     })
 
+    router.get('/payment/page/:page', async (req, res) => {
+        const payment_count = await Payment.find({user: req.user.id})
+        const payment = await Payment.find({user: req.user.id}).skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
+        res.send({
+            total: payment_count.length,
+            data: payment
+        })
+    })
+
     router.get('/payment', async (req, res) => {
-        const payment = await Payment.find({user: req.user.id})
+        const payment = await Payment.find({user: req.user.id}).sort('-createdAt')
         res.send({
             data: payment
         })
@@ -130,9 +140,11 @@ module.exports = app => {
     const authMiddleware = require('../middleware/auth')
     const levelMiddleware = require('../middleware/level')
 
-    router.get('/user', async (req, res) => {
-        const user = await User.find()
+    router.get('/user/page/:page', async (req, res) => {
+        const user_count = await User.find()
+        const user = await User.find().skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
         res.send({
+            total: user_count.length,
             data: user
         })
     })

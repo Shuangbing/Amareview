@@ -17,6 +17,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      background
+      style="margin-top: 10px;"
+      :current-page="currentPage"
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next"
+      :total="this.dataTotal"
+    ></el-pagination>
   </div>
 </template>
 
@@ -24,14 +32,23 @@
 export default {
   data() {
     return {
+      dataTotal: 0,
+      currentPage: 1,
       items: [],
       status: null
     };
   },
   methods: {
-    async fetch() {
-      const res = await this.$http.get("/api/user");
+    async handleCurrentChange(currentPage) {
+      const res = await this.$http.get("/api/user/page/"+currentPage);
       this.items = res.data.data;
+      this.dataTotal = res.data.total;
+      this.currentPage = currentPage;
+    },
+    async fetch() {
+      const res = await this.$http.get("/api/user/page/1");
+      this.items = res.data.data;
+      this.dataTotal = res.data.total;
     }
   },
   created() {

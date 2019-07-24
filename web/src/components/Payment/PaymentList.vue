@@ -15,10 +15,18 @@
             @click="$router.push('/payment/edit/'+scope.row._id)"
             circle
           ></el-button>
-          <el-button type="danger" icon="el-icon-delete" @click="delete1(scope.row._id)" circle></el-button>
+          <el-button type="danger" icon="el-icon-delete" @click="remove_payment(scope.row._id)" circle></el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      background
+      style="margin-top: 10px;"
+      :current-page="currentPage"
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next"
+      :total="this.dataTotal"
+    ></el-pagination>
   </div>
 </template>
 
@@ -26,25 +34,33 @@
 export default {
   data() {
     return {
+      dataTotal: 0,
+      currentPage: 1,
       items: [],
       status: null
     };
   },
   methods: {
-    async fetch() {
-      const res = await this.$http.get("/api/payment");
+    async handleCurrentChange(currentPage) {
+      const res = await this.$http.get("/api/payment/page/"+currentPage);
       this.items = res.data.data;
+      this.dataTotal = res.data.total;
+      this.currentPage = currentPage;
     },
-    async delete1(id) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async () => {
-          await this.$http.delete("/api/payment/"+id);
-          await this.fetch();
-        })
-        
+    async fetch() {
+      const res = await this.$http.get("/api/payment/page/1");
+      this.items = res.data.data;
+      this.dataTotal = res.data.total;
+    },
+    async remove_payment(id) {
+      this.$confirm("削除してもよろしいでしょうか", "メッセージ", {
+        confirmButtonText: "はい",
+        cancelButtonText: "いいえ",
+        type: "warning"
+      }).then(async () => {
+        await this.$http.delete("/api/payment/" + id);
+        await this.fetch();
+      });
     }
   },
   created() {
