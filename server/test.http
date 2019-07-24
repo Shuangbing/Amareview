@@ -26,6 +26,7 @@ POST {{url}}/api/order
 {{token}}
 
 {
+    "order_id": "1746431826314",
     "title": "test1",
     "asin": "123123123",
     "price_order": "1231",

@@ -28,10 +28,10 @@
         <el-input v-model="form.order_id"></el-input>
       </el-form-item>
       <el-form-item label="購入金額">
-        <el-input v-model.number="form.price_order" type="number"></el-input>
+        <el-input v-model.number="form.price_order"></el-input>
       </el-form-item>
       <el-form-item label="返金金額">
-        <el-input type="number" v-model="form.price_refund" v-bind:value="this.form.price_order*this.rate"></el-input>
+        <el-input v-model="form.price_refund"></el-input>
       </el-form-item>
       <el-form-item label="注文方法">
         <el-select v-model="form.payment" placeholder="注文方法">
@@ -71,6 +71,11 @@
 export default {
   props: {
     id: {}
+  },
+  watch: {
+    'form.price_order':function(val) {
+      this.form.price_refund = parseInt(val * this.rate);
+    }
   },
   data() {
     return {

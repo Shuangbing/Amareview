@@ -37,6 +37,11 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+    background style="margin-top: 10px;"
+    layout="prev, pager, next"
+    :total="this.dataTotal">
+    </el-pagination>
   </div>
 </template>
 
@@ -44,6 +49,8 @@
 export default {
   data() {
     return {
+      dataTotal: 0,
+      pageNow: 0,
       items: [],
       status: null
     };
@@ -52,6 +59,7 @@ export default {
     async fetch() {
       const res = await this.$http.get("/api/order");
       this.items = res.data.data;
+      this.dataTotal = res.data.total;
     },
     async delete1(id) {
         await this.$http.delete("/api/order/"+id);

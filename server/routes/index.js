@@ -20,6 +20,7 @@ module.exports = app => {
     router.get('/order', async (req, res) => {
         const order = await Order.find({user: req.user.id}).sort('-createdAt')
         res.send({
+            total: order.length,
             data: order
         })
     })
