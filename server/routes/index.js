@@ -42,18 +42,8 @@ module.exports = app => {
 
 
     router.post('/order', async (req, res) => {
-        const { title, asin, price_order, price_refund, seller, status, comment, order_id } = req.body
-        const order = await Order.create({
-            user: req.user.id,
-            title: title,
-            asin: asin,
-            price_order: price_order,
-            price_refund: price_refund,
-            seller: seller,
-            status: status,
-            comment: comment,
-            order_id: order_id
-        })
+        req.body.user = req.user.id
+        const order = await Order.create(req.body)
         res.send({
             message: '注文を作成しました',
             data: order
