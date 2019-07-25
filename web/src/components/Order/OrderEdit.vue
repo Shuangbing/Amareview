@@ -133,12 +133,12 @@ export default {
     },
     async fetch() {
       const res = await this.$http.get("/api/order/" + this.id);
-      const res_rate = await this.$http.get("/api/order/rate");
       this.form = res.data.data;
-      this.rate = res_rate.data.data.rate;
     }
   },
   async created() {
+    const res_rate = await this.$http.get("/api/order/rate");
+    this.rate = res_rate.data.data.rate;
     const res2 = await this.$http.get("/api/payment");
     this.payment_list = res2.data.data
     if (this.id) {
