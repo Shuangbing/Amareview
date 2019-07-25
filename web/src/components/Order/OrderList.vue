@@ -12,7 +12,7 @@
             <el-tag v-if="scope.row.status==4" type="warning">反映待ち</el-tag>
             <el-tag v-if="scope.row.status==5" type="warning">返金待ち</el-tag>
             <el-tag v-if="scope.row.status==6" type="success">完了</el-tag>
-            {{scope.row.title}}
+            {{scope.row.title|ellipsis}}
           </div>
         </template>
       </el-table-column>
@@ -59,6 +59,15 @@
 
 <script>
 export default {
+  filters: {
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 30) {
+        return value.slice(0,30) + '...'
+      }
+      return value
+    }
+  },
   data() {
     return {
       dataTotal: 0,
