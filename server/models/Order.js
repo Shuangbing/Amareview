@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
     title: { type: String, required: true },
     asin: { type: String },
-    order_id: { type: String, required: true, unique: true },
+    order_id: { type: String, required: true },
     user: { type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true},
     payment: { type: mongoose.SchemaTypes.ObjectId, ref: 'Payment' },
     price_order: { type: Number },

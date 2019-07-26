@@ -16,10 +16,10 @@ module.exports = app => {
             data: exchange
         })
     })
-    
+
     router.get('/order/page/:page', async (req, res) => {
-        const order_count = await Order.find({user: req.user.id})
-        const orders = await Order.find({user: req.user.id}).skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
+        const order_count = await Order.find({ user: req.user.id })
+        const orders = await Order.find({ user: req.user.id }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: order_count.length,
             data: orders
@@ -34,7 +34,7 @@ module.exports = app => {
     })
 
     router.delete('/order/:id', async (req, res) => {
-        const order = await Order.findOneAndRemove({_id: req.params.id, user: req.user.id})
+        const order = await Order.findOneAndRemove({ _id: req.params.id, user: req.user.id })
         res.send({
             message: '注文を削除しました',
         })
@@ -51,7 +51,7 @@ module.exports = app => {
     })
 
     router.put('/order/:id', async (req, res) => {
-        const order = await Order.findOneAndUpdate({_id: req.params.id, user: req.user.id}, req.body, { new: true })
+        const order = await Order.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, req.body, { new: true })
         res.send({
             message: '注文を更新しました',
             data: order
@@ -60,7 +60,7 @@ module.exports = app => {
 
     router.put('/order/status', async (req, res) => {
         const { id, status } = req.body;
-        const order = await Order.findOneAndUpdate({_id: id, user: req.user.id}, {
+        const order = await Order.findOneAndUpdate({ _id: id, user: req.user.id }, {
             status: status
         }, { new: true })
         res.send({
@@ -69,8 +69,8 @@ module.exports = app => {
     })
 
     router.get('/payment/page/:page', async (req, res) => {
-        const payment_count = await Payment.find({user: req.user.id})
-        const payment = await Payment.find({user: req.user.id}).skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
+        const payment_count = await Payment.find({ user: req.user.id })
+        const payment = await Payment.find({ user: req.user.id }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: payment_count.length,
             data: payment
@@ -78,7 +78,7 @@ module.exports = app => {
     })
 
     router.get('/payment', async (req, res) => {
-        const payment = await Payment.find({user: req.user.id}).sort('-createdAt')
+        const payment = await Payment.find({ user: req.user.id }).sort('-createdAt')
         res.send({
             data: payment
         })
@@ -101,7 +101,7 @@ module.exports = app => {
 
     router.put('/payment/:id', async (req, res) => {
         const { type, account, password, comment } = req.body
-        const payment = await Payment.findOneAndUpdate({_id: req.params.id, user: req.user.id}, {
+        const payment = await Payment.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, {
             type: type,
             account: account,
             password: password,
@@ -114,14 +114,14 @@ module.exports = app => {
     })
 
     router.get('/payment/:id', async (req, res) => {
-        const payment = await Payment.findOne({_id: req.params.id, user: req.user.id})
+        const payment = await Payment.findOne({ _id: req.params.id, user: req.user.id })
         res.send({
             data: payment
         })
     })
 
     router.delete('/payment/:id', async (req, res) => {
-        const order = await Payment.findOneAndRemove({_id: req.params.id, user: req.user.id})
+        const order = await Payment.findOneAndRemove({ _id: req.params.id, user: req.user.id })
         res.send({
             message: '購入方法を削除しました',
         })
@@ -132,7 +132,7 @@ module.exports = app => {
 
     router.get('/user/page/:page', async (req, res) => {
         const user_count = await User.find()
-        const user = await User.find().skip((req.params.page-1) * 10).limit(10).sort('-createdAt')
+        const user = await User.find().skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: user_count.length,
             data: user
@@ -146,15 +146,15 @@ module.exports = app => {
         })
     })
 
-    router.post('/user', levelMiddleware() ,async (req, res) => {
+    router.post('/user', levelMiddleware(), async (req, res) => {
         const user = await User.create(req.body)
         res.send({
             message: '従業員追加しました',
         })
     })
 
-    router.put('/user/:id', levelMiddleware() ,async (req, res) => {
-        const user = await User.findByIdAndUpdate(req.params.id,req.body)
+    router.put('/user/:id', levelMiddleware(), async (req, res) => {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body)
         res.send({
             message: '従業員情報更新しました',
         })
@@ -163,13 +163,34 @@ module.exports = app => {
 
     app.use('/api', authMiddleware(), router)
 
+    app.get('/simple/post', async (req, res) => {
+        const exchange = await ExChange.findOne()
+        const { username, password, order_name, order_asin, order_price } = req.query
+        const user = await User.findOne({
+            username: username
+        }).select('+password')
+        assert(user, 422, 'ユーザが見つかりませんでした')
+        const isValid = require('bcrypt').compareSync(password, user.password)
+        assert(isValid, 422, 'パスワードが正しくありません')
+        const order = await Order.create({
+            title: order_name,
+            asin: order_asin,
+            order_id: '0000-1111-0000-1111',
+            user: user._id,
+            price_order: order_price,
+            price_refund: order_price*exchange.rate
+        })
+        res.send(order)
+        
+    })
+
     app.post('/auth/register', async (req, res) => {
         const { username, password } = req.body
         const user = await User.create({
             username: username,
             password: password
         })
-        
+
         res.send({
             message: '登録完了',
             data: user
