@@ -10,6 +10,11 @@ module.exports = app => {
         mergeParams: true
     })
 
+
+    router.get('/dashboard', async (req, res) => {
+        
+    })
+
     router.get('/order/rate', async (req, res) => {
         const exchange = await ExChange.findOne()
         res.send({
@@ -178,10 +183,10 @@ module.exports = app => {
             order_id: '0000-1111-0000-1111',
             user: user._id,
             price_order: order_price,
-            price_refund: order_price*exchange.rate
+            price_refund: order_price * exchange.rate
         })
         res.send(order)
-        
+
     })
 
     app.post('/auth/register', async (req, res) => {
@@ -205,7 +210,7 @@ module.exports = app => {
         assert(user, 422, 'ユーザが見つかりませんでした')
         const isValid = require('bcrypt').compareSync(password, user.password)
         assert(isValid, 422, 'パスワードが正しくありません')
-        const token = jwt.sign({ id: user._id }, app.get('secret'))
+        const token = jwt.sign({ id: user._id }, app.get('secret'), { expiresIn: '1d' })
         res.send({
             message: 'ログイン完了',
             data: {

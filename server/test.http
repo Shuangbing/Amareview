@@ -1,6 +1,6 @@
 @url=http://localhost:3000
 @header=content-type: application/json; charset=utf-8
-@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkMzI3NTc5NDFiNTU2MDllZDI4M2Q3YSIsImlhdCI6MTU2MzU4ODAzMX0.hz3E2FucXAt28MrDwBkHXKXpkpva4yN6E-wj3EuNvF0
+@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkM2JmM2EzYjFjMjc2NTI2YzVmMWMxNCIsImlhdCI6MTU2NDIxMDE0MywiZXhwIjoxNTY0Mjk2NTQzfQ.GaSigcdpmHdfjEWqPIHgbQG_wNZUy_T8LsGEw3F6usg
 
 ###auth register
 POST {{url}}/auth/register
@@ -16,7 +16,7 @@ POST {{url}}/auth/login
 {{header}}
 
 {
-    "username": "user1",
+    "username": "user12",
     "password": "1z2x3c"
 }
 

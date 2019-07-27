@@ -13,6 +13,8 @@ import PaymentEdit from './components/Payment/PaymentEdit';
 import UserList from './components/User/UserList';
 import UserEdit from './components/User/UserEdit';
 
+import Dashboard from './components/Dashboard';
+
 Vue.use(Router)
 
 const router = new Router({
@@ -21,7 +23,9 @@ const router = new Router({
       path: '/',
       name: 'Main',
       component: Main,
+      redirect: '/dashboard',
       children: [
+        { path: '/dashboard', component: Dashboard },
         { path: '/order/create', component: OrderEdit },
         { path: '/order/edit/:id', component: OrderEdit, props: true },
         { path: '/order/list', component: OrderList },
