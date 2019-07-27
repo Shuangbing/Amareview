@@ -5,7 +5,7 @@ const date = new Date();
 date.setDate(date.getDate() - 1);
 
 const exChangeUpdate = () => {
-    schedule.scheduleJob('1 * * * * *', () => {
+    schedule.scheduleJob('* 0 * * * *', () => {
         axios.post('https://www.unionpayintl.com/cardholderServ/serviceCenter/rate/search', 'curDate=' + dateFtt('yyyy-MM-dd', date) + '&baseCurrency=CNY&transactionCurrency=JPY')
             .then(res => {
                 if (res.data.exchangeRate > 0) {
