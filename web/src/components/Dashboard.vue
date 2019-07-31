@@ -22,7 +22,7 @@
         <div slot="header" class="clearfix">
           <span>返金待ち金額(JPY)</span>
         </div>
-        <div class="text item">1230円</div>
+        <div class="text item">{{items.orderRefundJPY}}円</div>
       </el-card>
     </el-col>
     <el-col :span="6">
@@ -30,7 +30,7 @@
         <div slot="header" class="clearfix">
           <span>返金待ち金額(CNY)</span>
         </div>
-        <div class="text item">1230円</div>
+        <div class="text item">{{items.orderRefundCNY}}元</div>
       </el-card>
     </el-col>
   </el-row>

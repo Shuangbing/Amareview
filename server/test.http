@@ -13,7 +13,7 @@ POST {{url}}/auth/register
 {{header}}
 
 {
-    "username": "user12",
+    "username": "user123",
     "password": "1z2x3c"
 }
 

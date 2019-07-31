@@ -12,16 +12,43 @@ module.exports = app => {
 
 
     router.get('/dashboard', async (req, res) => {
-        const today = new Date()
-        const order_SUM = await Order.find({ user: req.user.id }).count()
-        const waitRefund_SUM = await Order.find({
-            user: req.user.id, "status": {
-                "$gte": 1, "$lte": 5
-            }
-        }).count()
+        const OrderTotal = await Order
+            .aggregate(
+                [
+                    { $match: { user: req.user._id } },
+                    {
+                        $group: {
+                            _id: null,
+                            orderSUM: { $sum: 1 },
+                        }
+                    }
+                ])
+        const OrderWaitRefundTotal = await Order
+            .aggregate(
+                [
+                    {
+                        $match: {
+                            user: req.user._id, "status": {
+                                "$gte": 1, "$lte": 5
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            orderRefundJPY: { $sum: "$price_order" },
+                            orderRefundCNY: { $sum: "$price_refund" },
+                            waitRefund_SUM: { $sum: 1 },
+                        }
+                    }
+                ])
+        const { orderSUM } = OrderTotal.pop()
+        const { orderRefundJPY, orderRefundCNY, waitRefund_SUM } = OrderWaitRefundTotal.pop()
         res.send({
             data: {
-                orderSUM: order_SUM,
+                orderSUM: orderSUM,
+                orderRefundCNY: orderRefundCNY,
+                orderRefundJPY: orderRefundJPY,
                 waitRefund_SUM: waitRefund_SUM
             }
         })
