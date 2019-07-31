@@ -7,7 +7,11 @@
         <template slot-scope="scope">
           <div>
             <el-popover placement="right" trigger="click">
-              <el-select v-model="scope.row.status" placeholder="注文状態更新">
+              <el-select
+                v-model="scope.row.status"
+                placeholder="注文状態更新"
+                @change="update_order_status(scope.row._id, scope.row.status)"
+              >
                 <el-option
                   v-for="item in status_options"
                   :key="item.value"
@@ -15,11 +19,6 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-button
-                type="primary"
-                style="margin-left: 10px;"
-                @click="update_order_status(scope.row._id, scope.row.status)"
-              >更新</el-button>
               <el-tag v-if="scope.row.status==1" type="info" slot="reference">支払待ち</el-tag>
               <el-tag v-if="scope.row.status==2" type="info" slot="reference">受取待ち</el-tag>
               <el-tag v-if="scope.row.status==3" type="info" slot="reference">評価待ち</el-tag>
@@ -139,7 +138,7 @@ export default {
       await this.fetch();
     },
     async update_order_status(id, status) {
-      await this.$http.put("/api/order/status/" + id, { status: status });
+      await this.$http.put("/api/order/status/" + id, { status: status })
     }
   },
   created() {
