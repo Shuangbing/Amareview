@@ -22,7 +22,8 @@
         <div slot="header" class="clearfix">
           <span>返金待ち金額(JPY)</span>
         </div>
-        <div class="text item">{{items.orderRefundJPY}}円</div>
+        
+        <div class="text item"><i class="el-icon-money"></i>{{items.orderRefundJPY}}</div>
       </el-card>
     </el-col>
     <el-col :span="6">
@@ -30,7 +31,7 @@
         <div slot="header" class="clearfix">
           <span>返金待ち金額(CNY)</span>
         </div>
-        <div class="text item">{{items.orderRefund}}円</div>
+        <div class="text item"><i class="el-icon-money"></i>{{items.orderRefundCNY}}</div>
       </el-card>
     </el-col>
   </el-row>
@@ -57,7 +58,7 @@ export default {
 
 <style>
 .text {
-  font-size: 40px;
+  font-size: 2rem;
 }
 
 .item {
