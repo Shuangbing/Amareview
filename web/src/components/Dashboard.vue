@@ -24,7 +24,7 @@
             <span>返金待ち金額(JPY)</span>
           </div>
 
-          <div class="text item">
+          <div class="textPrice item">
             <i class="el-icon-money"></i>
             {{items.orderRefundJPY}}
           </div>
@@ -35,7 +35,7 @@
           <div slot="header" class="clearfix">
             <span>返金待ち金額(CNY)</span>
           </div>
-          <div class="text item">
+          <div class="textPrice item">
             <i class="el-icon-money"></i>
             {{items.orderRefundCNY}}
           </div>
@@ -49,7 +49,7 @@
             <span>注文数</span>
           </div>
           <div>
-            <chart ref="chart1" :options="totalOrderCount" :auto-resize="true"></chart>
+            <chart ref="chart1" style="width: 100%;" :options="totalOrderCount" :auto-resize="true"></chart>
           </div>
         </el-card>
       </el-col>
@@ -59,7 +59,7 @@
             <span>注文金額</span>
           </div>
           <div>
-            <chart ref="chart2" :options="totalOrderPrice" :auto-resize="true"></chart>
+            <chart ref="chart2" style="width: 100%;" :options="totalOrderPrice" :auto-resize="true"></chart>
           </div>
         </el-card>
       </el-col>
@@ -172,6 +172,9 @@ export default {
 <style>
 .text {
   font-size: 2rem;
+}
+.textPrice {
+  font-size: 1.5rem;
 }
 
 .item {
