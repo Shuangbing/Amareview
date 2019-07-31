@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100vh; boder">
     <el-header style="background-color: rgb(238, 241, 246)">
-        <h1>Amazon Review Center</h1>
+      <h1>Amazon Review Center</h1>
     </el-header>
     <el-container>
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
@@ -11,6 +11,10 @@
           unique-opened
           :default-active="$router.path"
         >
+          <el-menu-item index="/dashboard">
+            <i class="el-icon-s-marketing"></i>
+            <span slot="title">DashBoard</span>
+          </el-menu-item>
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-s-order"></i>注文管理

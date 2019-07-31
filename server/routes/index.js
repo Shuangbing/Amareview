@@ -12,7 +12,20 @@ module.exports = app => {
 
 
     router.get('/dashboard', async (req, res) => {
-        
+        const today = new Date()
+        const order_SUM = await Order.find({ user: req.user.id }).count()
+        const waitRefund_SUM = await Order.find({
+            user: req.user.id, "status": {
+                "$gte": 1, "$lte": 5
+            }
+        }).count()
+        res.send({
+            data: {
+                orderSUM: order_SUM,
+                waitRefund_SUM: waitRefund_SUM
+            }
+        })
+
     })
 
     router.get('/order/rate', async (req, res) => {
@@ -63,13 +76,14 @@ module.exports = app => {
         })
     })
 
-    router.put('/order/status', async (req, res) => {
-        const { id, status } = req.body;
-        const order = await Order.findOneAndUpdate({ _id: id, user: req.user.id }, {
+    router.put('/order/status/:id', async (req, res) => {
+        const { status } = req.body;
+        const order = await Order.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, {
             status: status
         }, { new: true })
         res.send({
-            data: order
+            data: order,
+            message: '注文状態を更新しました'
         })
     })
 

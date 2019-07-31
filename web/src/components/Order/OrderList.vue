@@ -6,12 +6,27 @@
       <el-table-column label="商品名">
         <template slot-scope="scope">
           <div>
-            <el-tag v-if="scope.row.status==1" type="info">支払待ち</el-tag>
-            <el-tag v-if="scope.row.status==2" type="info">受取待ち</el-tag>
-            <el-tag v-if="scope.row.status==3" type="info">評価待ち</el-tag>
-            <el-tag v-if="scope.row.status==4" type="warning">反映待ち</el-tag>
-            <el-tag v-if="scope.row.status==5" type="warning">返金待ち</el-tag>
-            <el-tag v-if="scope.row.status==6" type="success">完了</el-tag>
+            <el-popover placement="right" trigger="click">
+              <el-select v-model="scope.row.status" placeholder="注文状態更新">
+                <el-option
+                  v-for="item in status_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+              <el-button
+                type="primary"
+                style="margin-left: 10px;"
+                @click="update_order_status(scope.row._id, scope.row.status)"
+              >更新</el-button>
+              <el-tag v-if="scope.row.status==1" type="info" slot="reference">支払待ち</el-tag>
+              <el-tag v-if="scope.row.status==2" type="info" slot="reference">受取待ち</el-tag>
+              <el-tag v-if="scope.row.status==3" type="info" slot="reference">評価待ち</el-tag>
+              <el-tag v-if="scope.row.status==4" type="warning" slot="reference">反映待ち</el-tag>
+              <el-tag v-if="scope.row.status==5" type="warning" slot="reference">返金待ち</el-tag>
+              <el-tag v-if="scope.row.status==6" type="success" slot="reference">完了</el-tag>
+            </el-popover>
             {{scope.row.title|ellipsis}}
           </div>
         </template>
@@ -42,7 +57,12 @@
             @click="$router.push('/order/edit/'+scope.row._id)"
             circle
           ></el-button>
-          <el-button type="danger" icon="el-icon-delete" @click="remove_order(scope.row._id)" circle></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            @click="remove_order(scope.row._id)"
+            circle
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,12 +80,12 @@
 <script>
 export default {
   filters: {
-    ellipsis (value) {
-      if (!value) return ''
+    ellipsis(value) {
+      if (!value) return "";
       if (value.length > 30) {
-        return value.slice(0,30) + '...'
+        return value.slice(0, 30) + "...";
       }
-      return value
+      return value;
     }
   },
   data() {
@@ -73,12 +93,38 @@ export default {
       dataTotal: 0,
       currentPage: 1,
       items: [],
-      status: null
+      status: null,
+      status_options: [
+        {
+          value: 1,
+          label: "支払待ち"
+        },
+        {
+          value: 2,
+          label: "受取待ち"
+        },
+        {
+          value: 3,
+          label: "評価待ち"
+        },
+        {
+          value: 4,
+          label: "反映待ち"
+        },
+        {
+          value: 5,
+          label: "返金待ち"
+        },
+        {
+          value: 6,
+          label: "完了"
+        }
+      ]
     };
   },
   methods: {
     async handleCurrentChange(currentPage) {
-      const res = await this.$http.get("/api/order/page/"+currentPage);
+      const res = await this.$http.get("/api/order/page/" + currentPage);
       this.items = res.data.data;
       this.dataTotal = res.data.total;
       this.currentPage = currentPage;
@@ -91,6 +137,9 @@ export default {
     async remove_order(id) {
       await this.$http.delete("/api/order/" + id);
       await this.fetch();
+    },
+    async update_order_status(id, status) {
+      await this.$http.put("/api/order/status/" + id, { status: status });
     }
   },
   created() {

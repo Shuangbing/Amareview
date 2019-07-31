@@ -14,7 +14,6 @@
     "element-ui": "^2.10.1",
     "moment": "^2.24.0",
     "vue": "^2.6.10",
-    "vue-echarts": "^4.0.3",
     "vue-router": "^3.0.7"
   },
   "devDependencies": {

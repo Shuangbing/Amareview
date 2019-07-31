@@ -6,31 +6,39 @@ date.setDate(date.getDate() - 1);
 
 const exChangeUpdate = () => {
     schedule.scheduleJob('* 0 * * * *', () => {
-        axios.post('https://www.unionpayintl.com/cardholderServ/serviceCenter/rate/search', 'curDate=' + dateFtt('yyyy-MM-dd', date) + '&baseCurrency=CNY&transactionCurrency=JPY')
-            .then(res => {
-                if (res.data.exchangeRate > 0) {
-                    console.log('ExChange Updated.' + new Date());
-                    console.log('Newest ExchangeRate - ' + res.data.exchangeRate)
-                    Exchange.findOne({ tag: 1 }, function (err, doc) {
-                        if (doc == null) {
-                            Exchange.create({ rate: res.data.exchangeRate })
-                        } else {
-                            doc.rate = res.data.exchangeRate
-                            doc.save()
-                        }
-                    })
-
-                } else {
-                    console.log('ExChange Updated Faild.' + new Date());
-                }
-            })
-            .catch(err => {
-                console.log('ExChange Updated Faild.(ERROR)' + new Date());
-            })
+        updateExChange()
     });
 }
 
-exChangeUpdate();
+exChangeUpdate()
+updateExChange()
+//setExChange(0.0630000)
+
+function updateExChange() {
+    axios.post('https://www.unionpayintl.com/cardholderServ/serviceCenter/rate/search', 'curDate=' + dateFtt('yyyy-MM-dd', date) + '&baseCurrency=CNY&transactionCurrency=JPY')
+        .then(res => {
+            if (res.data.exchangeRate > 0) {
+                console.log('Newest ExchangeRate - ' + res.data.exchangeRate)
+                setExChange(res.data.exchangeRate)
+            } else {
+                console.log('ExChange Updated Faild.' + new Date())
+            }
+        })
+        .catch(err => {
+            console.log('ExChange Updated Faild.(ERROR)' + new Date())
+        })
+}
+
+function setExChange(rate) {
+    Exchange.findOne({ tag: 1 }, function (err, doc) {
+        if (doc == null) {
+            Exchange.create({ rate: rate })
+        } else {
+            doc.rate = rate
+            doc.save()
+        }
+    })
+}
 
 
 function dateFtt(fmt, date) { //author: meizz   

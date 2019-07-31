@@ -1,57 +1,75 @@
 
 <template>
-  <v-chart :options="polar" />
+  <el-row :gutter="20">
+    <el-col :span="6">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>注文数</span>
+        </div>
+        <div class="text item">{{items.orderSUM}}</div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>返金待ち注文数</span>
+        </div>
+        <div class="text item">{{items.waitRefund_SUM}}</div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>返金待ち金額(JPY)</span>
+        </div>
+        <div class="text item">1230円</div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>返金待ち金額(CNY)</span>
+        </div>
+        <div class="text item">1230円</div>
+      </el-card>
+    </el-col>
+  </el-row>
 </template>
 
+<script>
+export default {
+  data() {
+    return{
+      items: []
+    }
+  },
+  methods: {
+    async fetch() {
+      const res = await this.$http.get("/api/dashboard");
+      this.items = res.data.data;
+    }
+  },
+  created() {
+    this.fetch();
+  }
+}
+</script>
+
 <style>
-/**
- * The default size is 600px×400px, for responsive charts
- * you may need to set percentage values as follows (also
- * don't forget to provide a size for the container).
- */
-.echarts {
-  width: 100%;
-  height: 100%;
+.text {
+  font-size: 40px;
+}
+
+.item {
+  margin-bottom: 100px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
 }
 </style>
-
-<script>
-import ECharts from "vue-echarts";
-import "echarts/lib/chart/line";
-import "echarts/lib/component/polar";
-
-export default {
-  components: {
-    "v-chart": ECharts
-  },
-  data() {
-    let data = [];
-
-    for (let i = 0; i <= 360; i++) {
-      let t = (i / 180) * Math.PI;
-      let r = Math.sin(2 * t) * Math.cos(2 * t);
-      data.push([r, i]);
-    }
-
-    return {
-      polar: {
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: "line",
-            areaStyle: {}
-          }
-        ]
-      }
-    };
-  }
-};
-</script>

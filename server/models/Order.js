@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     price_order: { type: Number },
     price_refund: { type: Number },
     seller: { type: String },
-    status: { type: Number },
+    status: { type: Number, default: 1 },
     comment: { type: String }
 }, {
         timestamps: true

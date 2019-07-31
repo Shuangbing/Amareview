@@ -1,6 +1,12 @@
 @url=http://localhost:3000
 @header=content-type: application/json; charset=utf-8
-@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkM2JmM2EzYjFjMjc2NTI2YzVmMWMxNCIsImlhdCI6MTU2NDIxMDE0MywiZXhwIjoxNTY0Mjk2NTQzfQ.GaSigcdpmHdfjEWqPIHgbQG_wNZUy_T8LsGEw3F6usg
+@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkM2JmM2EzYjFjMjc2NTI2YzVmMWMxNCIsImlhdCI6MTU2NDUzNjE2NiwiZXhwIjoxNTY0NjIyNTY2fQ.0YND6sMbYphaKmQv_4Wuy7YW4PrYPeQL0sjxYA3Ueaw
+
+###order post
+GET {{url}}/api/dashboard
+{{header}}
+{{token}}
+
 
 ###auth register
 POST {{url}}/auth/register
