@@ -211,20 +211,23 @@ module.exports = app => {
 
     app.get('/simple/post', async (req, res) => {
         const exchange = await ExChange.findOne()
-        const { username, password, order_name, order_asin, order_price } = req.query
+        const { username, password, order_name, order_asin, order_price, order_no, order_account, seller } = req.query
         const user = await User.findOne({
             username: username
         }).select('+password')
         assert(user, 422, 'ユーザが見つかりませんでした')
         const isValid = require('bcrypt').compareSync(password, user.password)
         assert(isValid, 422, 'パスワードが正しくありません')
+        const payment = await Payment.findOne({ user: user._id, account: order_account })
         const order = await Order.create({
             title: order_name,
             asin: order_asin,
-            order_id: '0000-1111-0000-1111',
+            order_id: order_no,
             user: user._id,
             price_order: order_price,
-            price_refund: order_price * exchange.rate
+            price_refund: parseInt(order_price * exchange.rate),
+            payment: payment._id,
+            seller: seller
         })
         res.send(order)
 

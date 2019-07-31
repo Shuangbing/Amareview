@@ -30,7 +30,7 @@
         <div slot="header" class="clearfix">
           <span>返金待ち金額(CNY)</span>
         </div>
-        <div class="text item">{{items.orderRefundCNY}}元</div>
+        <div class="text item">{{items.orderRefund}}円</div>
       </el-card>
     </el-col>
   </el-row>
@@ -61,7 +61,8 @@ export default {
 }
 
 .item {
-  margin-bottom: 100px;
+  margin-bottom: 1vh;
+  height: 5vh;
 }
 
 .clearfix:before,
