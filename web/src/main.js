@@ -3,7 +3,13 @@ import App from './App.vue'
 import './plugins/element.js'
 import router from './router'
 import moment from 'moment'
+import ECharts from 'vue-echarts/components/ECharts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
 
+
+Vue.component('chart', ECharts)
 Vue.config.productionTip = false
 
 import http from './http'

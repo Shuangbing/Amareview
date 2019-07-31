@@ -5,7 +5,7 @@ const date = new Date();
 date.setDate(date.getDate() - 1);
 
 const exChangeUpdate = () => {
-    schedule.scheduleJob('* 0 * * * *', () => {
+    schedule.scheduleJob('0 0 * * * *', () => {
         updateExChange()
     });
 }

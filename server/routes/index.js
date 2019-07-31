@@ -42,6 +42,29 @@ module.exports = app => {
                         }
                     }
                 ])
+        const WeekTotal = await Order.aggregate([
+            {
+                $match: {
+                    "user": req.user._id
+                }
+            },
+            {
+                $project: {
+                    day: { $substr: [{ "$add": ["$createdAt", 32400000] }, 0, 10] },
+                    "price_order": 1
+                },
+            },
+            {
+                $group: {
+                    _id: "$day",
+                    totalPrice: { $sum: "$price_order" },
+                    totalCount: { $sum: 1 },
+                }
+            },
+            {
+                $sort: { _id: 1 }
+            }
+        ])
         const { orderSUM } = OrderTotal.pop()
         const { orderRefundJPY, orderRefundCNY, waitRefund_SUM } = OrderWaitRefundTotal.pop()
         res.send({
@@ -49,7 +72,8 @@ module.exports = app => {
                 orderSUM: orderSUM,
                 orderRefundCNY: orderRefundCNY,
                 orderRefundJPY: orderRefundJPY,
-                waitRefund_SUM: waitRefund_SUM
+                waitRefund_SUM: waitRefund_SUM,
+                WeekTotal: WeekTotal,
             }
         })
 

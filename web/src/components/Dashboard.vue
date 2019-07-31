@@ -1,59 +1,172 @@
 
 <template>
-  <el-row :gutter="20">
-    <el-col :span="6">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>注文数</span>
-        </div>
-        <div class="text item">{{items.orderSUM}}</div>
-      </el-card>
-    </el-col>
-    <el-col :span="6">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>返金待ち注文数</span>
-        </div>
-        <div class="text item">{{items.waitRefund_SUM}}</div>
-      </el-card>
-    </el-col>
-    <el-col :span="6">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>返金待ち金額(JPY)</span>
-        </div>
-        
-        <div class="text item"><i class="el-icon-money"></i>{{items.orderRefundJPY}}</div>
-      </el-card>
-    </el-col>
-    <el-col :span="6">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>返金待ち金額(CNY)</span>
-        </div>
-        <div class="text item"><i class="el-icon-money"></i>{{items.orderRefundCNY}}</div>
-      </el-card>
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>注文数</span>
+          </div>
+          <div class="text item">{{items.orderSUM}}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>返金待ち注文数</span>
+          </div>
+          <div class="text item">{{items.waitRefund_SUM}}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>返金待ち金額(JPY)</span>
+          </div>
+
+          <div class="text item">
+            <i class="el-icon-money"></i>
+            {{items.orderRefundJPY}}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>返金待ち金額(CNY)</span>
+          </div>
+          <div class="text item">
+            <i class="el-icon-money"></i>
+            {{items.orderRefundCNY}}
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-card class="box-card" style="margin-top: 15px; margin-right: 15px;">
+          <div slot="header" class="clearfix">
+            <span>注文数</span>
+          </div>
+          <div>
+            <chart ref="chart1" :options="totalOrderCount" :auto-resize="true"></chart>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card class="box-card" style="margin-top: 15px;">
+          <div slot="header" class="clearfix">
+            <span>注文金額</span>
+          </div>
+          <div>
+            <chart ref="chart2" :options="totalOrderPrice" :auto-resize="true"></chart>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return{
-      items: []
-    }
+    return {
+      items: [],
+      totalOrderCount: {},
+      totalOrderPrice: {}
+    };
   },
   methods: {
     async fetch() {
       const res = await this.$http.get("/api/dashboard");
       this.items = res.data.data;
+      this.totalOrderCount = {
+        color: ["#3398DB"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          }
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: this.items.WeekTotal.map(i => {
+              return i._id;
+            }),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value"
+          }
+        ],
+        series: [
+          {
+            name: "注文数",
+            type: "bar",
+            barWidth: "60%",
+            data: this.items.WeekTotal.map(i => {
+              return i.totalCount;
+            })
+          }
+        ]
+      },
+      this.totalOrderPrice = {
+        color: ["#3398DB"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "line"
+          }
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: this.items.WeekTotal.map(i => {
+              return i._id;
+            }),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value"
+          }
+        ],
+        series: [
+          {
+            name: "注文金額(JPY)",
+            type: "line",
+            data: this.items.WeekTotal.map(i => {
+              return i.totalPrice;
+            })
+          }
+        ]
+      };
     }
   },
   created() {
     this.fetch();
   }
-}
+};
 </script>
 
 <style>
