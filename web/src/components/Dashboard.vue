@@ -74,12 +74,9 @@
       <el-col :span="6">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>レート</span>
+            <span>レート(100JPY)</span>
           </div>
-          <div class="textPrice item">
-            <i class="el-icon-money"></i>
-            100JPY={{100*items.rate}}CNY
-          </div>
+          <div class="textPrice item">{{100*items.rate}}CNY</div>
         </el-card>
       </el-col>
     </el-row>

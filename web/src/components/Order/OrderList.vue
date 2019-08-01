@@ -30,9 +30,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="asin" label="ASIN" width="200"></el-table-column>
-      <el-table-column prop="seller" label="出品者連絡先" width="200"></el-table-column>
-      <el-table-column label="購入価格" width="150">
+      <el-table-column prop="asin" label="ASIN"></el-table-column>
+      <el-table-column prop="seller" label="出品者連絡先"></el-table-column>
+      <el-table-column label="購入価格">
         <template slot-scope="scope">
           <div>
             <el-tag type="info">JPY</el-tag>
@@ -40,7 +40,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="返金予定" width="150">
+      <el-table-column label="返金予定">
         <template slot-scope="scope">
           <div>
             <el-tag type="info">CNY</el-tag>
@@ -138,7 +138,7 @@ export default {
       await this.fetch();
     },
     async update_order_status(id, status) {
-      await this.$http.put("/api/order/status/" + id, { status: status })
+      await this.$http.put("/api/order/status/" + id, { status: status });
     }
   },
   created() {
