@@ -42,6 +42,47 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-row :gutter="20" style="margin-top: 10px;">
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>実績注文</span>
+          </div>
+          <div class="text item">{{items.Paying_SUM}}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>予定給料</span>
+          </div>
+          <div class="text item">{{parseInt(items.PayingRefundJPY*0.7/2)}}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>返金合計(JPY)</span>
+          </div>
+
+          <div class="textPrice item">
+            <i class="el-icon-money"></i>
+            {{items.PayingRefundJPY}}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>レート</span>
+          </div>
+          <div class="textPrice item">
+            <i class="el-icon-money"></i>
+            100JPY={{100*items.rate}}CNY
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
     <el-row>
       <el-col :span="12">
         <el-card class="box-card" style="margin-top: 15px; margin-right: 15px;">
@@ -80,7 +121,7 @@ export default {
     async fetch() {
       const res = await this.$http.get("/api/dashboard");
       this.items = res.data.data;
-      this.totalOrderCount = {
+      (this.totalOrderCount = {
         color: ["#3398DB"],
         tooltip: {
           trigger: "axis",
@@ -120,47 +161,47 @@ export default {
             })
           }
         ]
-      },
-      this.totalOrderPrice = {
-        color: ["#3398DB"],
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "line"
-          }
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: this.items.WeekTotal.map(i => {
-              return i._id;
-            }),
-            axisTick: {
-              alignWithLabel: true
+      }),
+        (this.totalOrderPrice = {
+          color: ["#3398DB"],
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "line"
             }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value"
-          }
-        ],
-        series: [
-          {
-            name: "注文金額(JPY)",
-            type: "line",
-            data: this.items.WeekTotal.map(i => {
-              return i.totalPrice;
-            })
-          }
-        ]
-      };
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: this.items.WeekTotal.map(i => {
+                return i._id;
+              }),
+              axisTick: {
+                alignWithLabel: true
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: "value"
+            }
+          ],
+          series: [
+            {
+              name: "注文金額(JPY)",
+              type: "line",
+              data: this.items.WeekTotal.map(i => {
+                return i.totalPrice;
+              })
+            }
+          ]
+        });
     }
   },
   created() {
