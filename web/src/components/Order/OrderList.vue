@@ -134,8 +134,14 @@ export default {
       this.dataTotal = res.data.total;
     },
     async remove_order(id) {
-      await this.$http.delete("/api/order/" + id);
-      await this.fetch();
+      this.$confirm("削除してもよろしいでしょうか", "メッセージ", {
+        confirmButtonText: "はい",
+        cancelButtonText: "いいえ",
+        type: "warning"
+      }).then(async () => {
+        await this.$http.delete("/api/order/" + id);
+        await this.fetch(); 
+      });
     },
     async update_order_status(id, status) {
       await this.$http.put("/api/order/status/" + id, { status: status });
