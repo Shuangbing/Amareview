@@ -89,14 +89,14 @@ module.exports = app => {
         res.send({
             data: {
                 rate: exchange.rate,
-                orderSUM: orderSUM,
-                orderRefundCNY: orderRefundCNY,
-                orderRefundJPY: orderRefundJPY,
-                waitRefund_SUM: waitRefund_SUM,
-                PayingRefundJPY: PayingRefundJPY,
-                PayingRefundCNY: PayingRefundCNY,
-                Paying_SUM: Paying_SUM,
-                WeekTotal: WeekTotal,
+                orderSUM: orderSUM || null,
+                orderRefundCNY: orderRefundCNY || 0,
+                orderRefundJPY: orderRefundJPY || 0,
+                waitRefund_SUM: waitRefund_SUM || 0,
+                PayingRefundJPY: PayingRefundJPY || 0,
+                PayingRefundCNY: PayingRefundCNY || 0,
+                Paying_SUM: Paying_SUM || 0,
+                WeekTotal: WeekTotal || null,
             }
         })
 
