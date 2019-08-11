@@ -15,6 +15,9 @@ import UserEdit from './components/User/UserEdit';
 
 import Dashboard from './components/Dashboard';
 
+import DeliveryList from './components/Delivery/DeliveryList';
+
+
 Vue.use(Router)
 
 const router = new Router({
@@ -35,6 +38,7 @@ const router = new Router({
         { path: '/user/create', component: UserEdit },
         { path: '/user/edit/:id', component: UserEdit, props: true },
         { path: '/user/list', component: UserList },
+        { path: '/delivery/list', component: DeliveryList },
       ]
     },
     {

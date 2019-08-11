@@ -113,7 +113,19 @@ export default {
         },
         {
           value: 6,
-          label: "完了"
+          label: "納品待ち"
+        },
+        {
+          value: 7,
+          label: "販売中"
+        },
+        {
+          value: 8,
+          label: "販売済み"
+        },
+        {
+          value: 9,
+          label: "決算完了"
         }
       ]
     };

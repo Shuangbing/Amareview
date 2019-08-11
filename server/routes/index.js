@@ -33,7 +33,9 @@ module.exports = app => {
         const OrderTotal = await Order
             .aggregate(
                 [
-                    { $match: { user: req.user._id } },
+                    {
+                        $match: { user: req.user._id }
+                    },
                     {
                         $group: {
                             _id: null,
@@ -89,29 +91,38 @@ module.exports = app => {
         res.send({
             data: {
                 rate: exchange.rate,
-                orderSUM: orderSUM || null,
-                orderRefundCNY: orderRefundCNY || 0,
-                orderRefundJPY: orderRefundJPY || 0,
-                waitRefund_SUM: waitRefund_SUM || 0,
-                PayingRefundJPY: PayingRefundJPY || 0,
-                PayingRefundCNY: PayingRefundCNY || 0,
-                Paying_SUM: Paying_SUM || 0,
-                WeekTotal: WeekTotal || null,
+                orderSUM: orderSUM,
+                orderRefundCNY: orderRefundCNY,
+                orderRefundJPY: orderRefundJPY,
+                waitRefund_SUM: waitRefund_SUM,
+                PayingRefundJPY: PayingRefundJPY,
+                PayingRefundCNY: PayingRefundCNY,
+                Paying_SUM: Paying_SUM,
+                WeekTotal: WeekTotal,
             }
         })
 
     })
 
+    router.get('/delivery/page/:page', async (req, res) => {
+        const order_count = await Order.find({ user: req.user.id })
+        const orders = await Order.find({ user: req.user.id, status: { $gte: 6 } }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
+        res.send({
+            total: order_count.length,
+            data: orders
+        })
+    })
+
     router.get('/order/rate', async (req, res) => {
         const exchange = await ExChange.findOne()
         res.send({
-            data: exchange
+            data: exchange || { rate: 1 }
         })
     })
 
     router.get('/order/page/:page', async (req, res) => {
         const order_count = await Order.find({ user: req.user.id })
-        const orders = await Order.find({ user: req.user.id }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
+        const orders = await Order.find({ user: req.user.id, status: { $lte: 5 } }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: order_count.length,
             data: orders

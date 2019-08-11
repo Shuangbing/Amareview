@@ -1,6 +1,6 @@
 @url=http://localhost:3000
 @header=content-type: application/json; charset=utf-8
-@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkM2JmM2EzYjFjMjc2NTI2YzVmMWMxNCIsImlhdCI6MTU2NDYzMjYzOCwiZXhwIjoxNTY0NzE5MDM4fQ.doXsIwVb7OiCiuXNCnLoNA8cz-7b6cJdahls54SQTxw
+@token=Authorization: Barae eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGZkMWE4MmE3MmVjODEyZWJkMzVkOCIsImlhdCI6MTU2NTUxMjQyNiwiZXhwIjoxNTY1NTk4ODI2fQ.KN58r-wM4qy3EccpFNvbJEsEbtrTLp27GKy4cPdt-Us
 
 ###order post
 GET {{url}}/api/dashboard
@@ -13,7 +13,7 @@ POST {{url}}/auth/register
 {{header}}
 
 {
-    "username": "user123",
+    "username": "kasouhei",
     "password": "1z2x3c"
 }
 
@@ -22,7 +22,7 @@ POST {{url}}/auth/login
 {{header}}
 
 {
-    "username": "user12",
+    "username": "kasouhei",
     "password": "1z2x3c"
 }
 

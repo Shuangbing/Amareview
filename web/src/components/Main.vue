@@ -27,6 +27,15 @@
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
+              <i class="el-icon-s-shop"></i>納品管理
+            </template>
+            <el-menu-item-group>
+              <template slot="title">納品管理</template>
+              <el-menu-item index="/delivery/list">納品一覧</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
               <i class="el-icon-user"></i>アカウント
             </template>
             <el-menu-item-group>
@@ -35,7 +44,7 @@
               <el-menu-item index="/payment/create">購入アカウント追加</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="3">
+          <el-submenu index="4">
             <template slot="title">
               <i class="el-icon-setting"></i>システム管理
             </template>
