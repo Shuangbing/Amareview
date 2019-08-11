@@ -108,6 +108,11 @@ GET {{url}}/api/payment
 {{header}}
 {{token}}
 
+###delivery get
+GET {{url}}/api/delivery
+{{header}}
+{{token}}
+
 
 ###
 POST https://www.unionpayintl.com/cardholderServ/serviceCenter/rate/search

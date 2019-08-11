@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>納品一覧</h1>
-
+    <el-button style="margin-bottom: 10px;" type="primary" @click="getDeliveryList">納品リストを出力する</el-button>
     <el-table :data="items" border style="width: 100%;">
       <el-table-column label="商品名">
         <template slot-scope="scope">
@@ -116,7 +116,7 @@ export default {
         {
           value: 5,
           label: "返金待ちに変更する"
-        },
+        }
       ]
     };
   },
@@ -132,6 +132,17 @@ export default {
       this.items = res.data.data;
       this.dataTotal = res.data.total;
     },
+    async getDeliveryList() {
+      await this.$http.get("/api/delivery").then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "delivery_order_list.csv");
+        document.body.appendChild(link);
+        link.click();
+      });
+      await this.fetch();
+    },
     async remove_order(id) {
       this.$confirm("削除してもよろしいでしょうか", "メッセージ", {
         confirmButtonText: "はい",
@@ -139,7 +150,7 @@ export default {
         type: "warning"
       }).then(async () => {
         await this.$http.delete("/api/order/" + id);
-        await this.fetch(); 
+        await this.fetch();
       });
     },
     async update_order_status(id, status) {

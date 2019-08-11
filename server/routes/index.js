@@ -18,7 +18,7 @@ module.exports = app => {
                 [
                     {
                         $match: {
-                            user: req.user._id, "status": 6
+                            user: req.user._id, "status": { $gte: 6 }
                         }
                     },
                     {
@@ -102,6 +102,16 @@ module.exports = app => {
             }
         })
 
+    })
+
+    router.get('/delivery', async (req, res) => {
+        const orders = await Order.find({ user: req.user.id, status: 6 }).sort('-createdAt')
+        await Order.updateMany({ user: req.user.id, status: 6 }, { $set: { status: 7 } })
+        var csv_data = '#product_title,#product_price,#product_asin,#product_createAt\n'
+        orders.forEach((data) => {
+            csv_data += data.title + ',' + data.price_order + ',' + data.asin + ',' + data.createdAt + '\n'
+        })
+        res.status(200).send(csv_data);
     })
 
     router.get('/delivery/page/:page', async (req, res) => {
