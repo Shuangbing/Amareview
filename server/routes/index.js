@@ -115,7 +115,7 @@ module.exports = app => {
     })
 
     router.get('/delivery/page/:page', async (req, res) => {
-        const order_count = await Order.find({ user: req.user.id })
+        const order_count = await Order.find({ user: req.user.id, status: { $gte: 6 } })
         const orders = await Order.find({ user: req.user.id, status: { $gte: 6 } }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: order_count.length,
@@ -131,7 +131,7 @@ module.exports = app => {
     })
 
     router.get('/order/page/:page', async (req, res) => {
-        const order_count = await Order.find({ user: req.user.id })
+        const order_count = await Order.find({ user: req.user.id, status: { $lte: 5 } })
         const orders = await Order.find({ user: req.user.id, status: { $lte: 5 } }).skip((req.params.page - 1) * 10).limit(10).sort('-createdAt')
         res.send({
             total: order_count.length,
