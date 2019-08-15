@@ -18,8 +18,13 @@
       <el-form-item v-if="id" label="最終更新">
         <el-tag>{{form.updatedAt}}</el-tag>
       </el-form-item>
-      <el-form-item label="商品名">
-        <el-input v-model="form.title"></el-input>
+      <el-form-item style="width: 100%;" label="商品名">
+        <td style="width: 100%;">
+          <el-input v-model="form.title"></el-input>
+        </td>
+        <td>
+          <el-button style="margin-left: 10px;" type="primary" @click="getReview">レビュー</el-button>
+        </td>
       </el-form-item>
       <el-form-item label="ASIN">
         <el-input v-model="form.asin"></el-input>
@@ -73,7 +78,7 @@ export default {
     id: {}
   },
   watch: {
-    'form.price_order':function(val) {
+    "form.price_order": function(val) {
       this.form.price_refund = parseInt(val * this.rate);
     }
   },
@@ -131,9 +136,13 @@ export default {
     };
   },
   methods: {
-    changeRefundPrice(){
-      alert('good')
+    changeRefundPrice() {
+      alert("good");
       this.form.price_refund = 100;
+    },
+    async getReview() {      
+      const keyword = this.form.title.split(' ').slice(0,5).join('+');
+      window.open("https://review.rakuten.co.jp/search/"+keyword+"/-/b0-d0-fO-s2-t1/", "_blank");
     },
     async onSubmit() {
       if (this.id) {
@@ -152,7 +161,7 @@ export default {
     const res_rate = await this.$http.get("/api/order/rate");
     this.rate = res_rate.data.data.rate;
     const res2 = await this.$http.get("/api/payment");
-    this.payment_list = res2.data.data
+    this.payment_list = res2.data.data;
     if (this.id) {
       this.id && this.fetch();
     }
