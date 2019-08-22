@@ -12,6 +12,7 @@ module.exports = app => {
 
 
     router.get('/dashboard', async (req, res) => {
+
         const exchange = await ExChange.findOne()
         const PayingTotal = await Order
             .aggregate(
@@ -85,9 +86,9 @@ module.exports = app => {
                 $sort: { _id: 1 }
             }
         ])
-        const { orderSUM } = OrderTotal.pop()
-        const { orderRefundJPY, orderRefundCNY, waitRefund_SUM } = OrderWaitRefundTotal.pop()
-        const { PayingRefundJPY, PayingRefundCNY, Paying_SUM } = PayingTotal.pop()
+        const { orderSUM } = OrderTotal.pop() || { orderSUM: 0 }
+        const { orderRefundJPY, orderRefundCNY, waitRefund_SUM } = OrderWaitRefundTotal.pop() || { orderRefundJPY: 0, orderRefundCNY: 0, waitRefund_SUM: 0 }
+        const { PayingRefundJPY, PayingRefundCNY, Paying_SUM } = PayingTotal.pop() || { PayingRefundJPY: 0, PayingRefundCNY: 0, Paying_SUM: 0 }
         res.send({
             data: {
                 rate: exchange.rate,
