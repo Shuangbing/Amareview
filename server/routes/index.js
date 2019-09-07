@@ -10,10 +10,32 @@ module.exports = app => {
         mergeParams: true
     })
 
+    function setExChange(rate) {
+        ExChange.findOne({ tag: 1 }, function (err, doc) {
+            if (doc == null) {
+                ExChange.create({ rate: rate })
+            } else {
+                doc.rate = rate
+                doc.save()
+            }
+        })
+    }
+
+
+    router.get('/system/rate', async (req, res) => {
+        const exchange = await ExChange.findOne() || { rate: 0 }
+        res.send({ data: { rate: exchange.rate } })
+    })
+
+    router.post('/system/rate', async (req, res) => {
+        const { rate } = req.body
+        setExChange(rate)
+        res.send({ message: 'レート更新完了' })
+    })
 
     router.get('/dashboard', async (req, res) => {
 
-        const exchange = await ExChange.findOne()
+        const exchange = await ExChange.findOne() || { rate: 0 }
         const PayingTotal = await Order
             .aggregate(
                 [

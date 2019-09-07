@@ -17,6 +17,7 @@ import Dashboard from './components/Dashboard';
 
 import DeliveryList from './components/Delivery/DeliveryList';
 
+import RateEdit from './components/System/RateEdit';
 
 Vue.use(Router)
 
@@ -39,16 +40,17 @@ const router = new Router({
         { path: '/user/edit/:id', component: UserEdit, props: true },
         { path: '/user/list', component: UserList },
         { path: '/delivery/list', component: DeliveryList },
+        { path: '/system/rate', component: RateEdit }
       ]
     },
     {
-      path: '/login', name: 'login', component: Login, meta: {isPublic : true}
+      path: '/login', name: 'login', component: Login, meta: { isPublic: true }
     }
-    
+
   ]
 })
 router.beforeEach((to, from, next) => {
-  if(!to.meta.isPublic && !localStorage.token) {
+  if (!to.meta.isPublic && !localStorage.token) {
     return next('/login')
   }
   next()

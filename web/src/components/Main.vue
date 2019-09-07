@@ -54,6 +54,7 @@
               <el-menu-item index="/user/create">従業員追加</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="管理者">
+              <el-menu-item index="/system/rate">レート更新</el-menu-item>
               <el-menu-item @click="logout">ログアウト</el-menu-item>
             </el-menu-item-group>
           </el-submenu>

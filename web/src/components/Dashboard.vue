@@ -76,7 +76,7 @@
           <div slot="header" class="clearfix">
             <span>レート(100JPY)</span>
           </div>
-          <div class="textPrice item">{{100*items.rate}}CNY</div>
+          <div class="textPrice item">{{(100*items.rate).toFixed(3)}}CNY</div>
         </el-card>
       </el-col>
     </el-row>
